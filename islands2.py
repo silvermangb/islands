@@ -10,48 +10,45 @@ import pprint
 
 
 def traverse(p_map, p_rows, p_cols, p_island_color, ):
-    pr = -1
-    pc = -1
+    loc = [-1, -1]
 
     stack = []
 
-    while pr + 1 < p_rows:
-        pr += 1
-        pc = -1
-        while pc + 1 < p_cols:
-            pc += 1
-            if p_map[pr][pc] > 1:
+    while loc[0] + 1 < p_rows:
+        loc[0] += 1
+        loc[1] = -1
+        while loc[1] + 1 < p_cols:
+            loc[1] += 1
+            if p_map[loc[0]][loc[1]] > 1:
                 continue
-            stack.append((pr, pc, p_island_color))
+            stack.append((loc[0], loc[1], p_island_color))
             while stack:
                 top = stack[-1]
-                pr0 = top[0]
-                pc0 = top[1]
-                if p_map[pr0][pc0] == 0:
+                if p_map[top[0]][top[1]] == 0:
                     stack.pop()
                     continue
-                elif p_map[pr0][pc0] == 1:
+                elif p_map[top[0]][top[1]] == 1:
                     p_island_color += 1
-                    p_map[pr0][pc0] = p_island_color
-                if pr0 - 1 > -1:
-                    if p_map[pr0 - 1][pc0] == 1:
-                        p_map[pr0 - 1][pc0] = p_map[pr0][pc0]
-                        stack.append((pr0 - 1, pc0, p_map[pr0][pc0]))
+                    p_map[top[0]][top[1]] = p_island_color
+                if top[0] - 1 > -1:
+                    if p_map[top[0] - 1][top[1]] == 1:
+                        p_map[top[0] - 1][top[1]] = p_map[top[0]][top[1]]
+                        stack.append((top[0] - 1, top[1], p_map[top[0]][top[1]]))
                         continue
-                if pr0 + 1 < p_rows:
-                    if p_map[pr0 + 1][pc0] == 1:
-                        p_map[pr0 + 1][pc0] = p_map[pr0][pc0]
-                        stack.append((pr0 + 1, pc0, p_map[pr0][pc0]))
+                if top[0] + 1 < p_rows:
+                    if p_map[top[0] + 1][top[1]] == 1:
+                        p_map[top[0] + 1][top[1]] = p_map[top[0]][top[1]]
+                        stack.append((top[0] + 1, top[1], p_map[top[0]][top[1]]))
                         continue
-                if pc0 - 1 > -1:
-                    if p_map[pr0][pc0 - 1] == 1:
-                        p_map[pr0][pc0 - 1] = p_map[pr0][pc0]
-                        stack.append((pr0, pc0 - 1, p_map[pr0][pc0]))
+                if top[1] - 1 > -1:
+                    if p_map[top[0]][top[1] - 1] == 1:
+                        p_map[top[0]][top[1] - 1] = p_map[top[0]][top[1]]
+                        stack.append((top[0], top[1] - 1, p_map[top[0]][top[1]]))
                         continue
-                if pc0 + 1 < p_cols:
-                    if p_map[pr0][pc0 + 1] == 1:
-                        p_map[pr0][pc0 + 1] = p_map[pr0][pc0]
-                        stack.append((pr0, pc0 + 1, p_map[pr0][pc0]))
+                if top[1] + 1 < p_cols:
+                    if p_map[top[0]][top[1] + 1] == 1:
+                        p_map[top[0]][top[1] + 1] = p_map[top[0]][top[1]]
+                        stack.append((top[0], top[1] + 1, p_map[top[0]][top[1]]))
                         continue
                 stack.pop()
     return p_island_color
