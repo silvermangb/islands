@@ -1,17 +1,13 @@
 import random
-'''
-000000
-011110
-011110
-011110
-000000
-'''
 
-max_stack = 0
 
-def traverse(p_map, p_rows, p_cols, p_island_color, ):
-    global max_stack
+def display_map(p_m):
+    for row in p_m:
+        x = ['% 3d' % i for i in row]
+        print x
 
+
+def traverse(p_map, p_rows, p_cols, p_island_color, p_islands):
     loc = [-1, -1]
 
     stack = []
@@ -25,9 +21,8 @@ def traverse(p_map, p_rows, p_cols, p_island_color, ):
             if p_map[loc[0]][loc[1]] > 1:
                 continue
             stack.append((loc[0], loc[1], p_island_color))
+            centroid_data = [0, 0, 0, 0]
             while stack:
-                if len(stack) > max_stack:
-                    max_stack = len(stack)
                 top = stack[-1]
                 if p_map[top[0]][top[1]] == 0:
                     stack.pop()
@@ -56,11 +51,22 @@ def traverse(p_map, p_rows, p_cols, p_island_color, ):
                         stack.append((top[0], top[1] + 1, p_map[top[0]][top[1]]))
                         continue
                 stack.pop()
-    return p_island_color
+                centroid_data[0] += top[0]
+                centroid_data[1] += 1
+                centroid_data[2] += top[1]
+                centroid_data[3] += 1
+            if centroid_data[1] > 0 or centroid_data[3] > 0:
+                r_cent = 0
+                if centroid_data[1] > 0:
+                    r_cent = float(centroid_data[0]) / centroid_data[1]
+                c_cent = 0
+                if centroid_data[3] > 0:
+                    c_cent = float(centroid_data[2]) / centroid_data[3]
+                p_islands.append((p_island_color, r_cent, c_cent))
 
 
-rows = 1024
-cols = 1024
+rows = 16
+cols = 16
 input_data = [[0 for j in xrange(cols)] for i in xrange(rows)]
 
 
@@ -86,10 +92,15 @@ def data2(p_rows, p_cols, p_input_data, p_percent):
         p_input_data[p[0]][p[1]] = 1
 
 
-data2(rows, cols, input_data, .75)
+data2(rows, cols, input_data, .5)
 
+print 'input'
+display_map(input_data)
+islands = []
+traverse(input_data, rows, cols, 1, islands)
+print 'output'
+display_map(input_data)
 
-island_count = traverse(input_data, rows, cols, 1) - 1
-
-print island_count
-print max_stack
+print len(islands)
+for i in islands:
+    print i
