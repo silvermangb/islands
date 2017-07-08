@@ -8,62 +8,65 @@ def display_map(p_m):
 
 
 def traverse(p_map, p_rows, p_cols, p_island_color, p_islands):
+    row_i = 0
+    col_i = 1
+    size_i = 2
+
     loc = [-1, -1]
 
     stack = []
 
-    while loc[0] + 1 < p_rows:
+    while loc[row_i] + 1 < p_rows:
 
-        loc[0] += 1
-        loc[1] = -1
-        while loc[1] + 1 < p_cols:
-            loc[1] += 1
-            if p_map[loc[0]][loc[1]] > 1:
+        loc[row_i] += 1
+        loc[col_i] = -1
+        while loc[col_i] + 1 < p_cols:
+            loc[col_i] += 1
+            if p_map[loc[row_i]][loc[col_i]] > 1:
                 continue
-            stack.append((loc[0], loc[1], p_island_color))
-            centroid_data = [0, 0, 0, 0]
+            stack.append((loc[row_i], loc[col_i], p_island_color))
+            size = 0
+            row_sum = 0
+            col_sum = 0
             while stack:
                 top = stack[-1]
-                if p_map[top[0]][top[1]] == 0:
+                if p_map[top[row_i]][top[col_i]] == 0:
                     stack.pop()
                     continue
-                elif p_map[top[0]][top[1]] == 1:
+                elif p_map[top[row_i]][top[col_i]] == 1:
                     p_island_color += 1
-                    p_map[top[0]][top[1]] = p_island_color
-                if top[0] - 1 > -1:
-                    if p_map[top[0] - 1][top[1]] == 1:
-                        p_map[top[0] - 1][top[1]] = p_map[top[0]][top[1]]
-                        stack.append((top[0] - 1, top[1], p_map[top[0]][top[1]]))
+                    p_map[top[row_i]][top[col_i]] = p_island_color
+                if top[row_i] - 1 > -1:
+                    if p_map[top[row_i] - 1][top[col_i]] == 1:
+                        p_map[top[row_i] - 1][top[col_i]] = p_map[top[row_i]][top[col_i]]
+                        stack.append((top[row_i] - 1, top[col_i], p_map[top[row_i]][top[col_i]]))
                         continue
-                if top[0] + 1 < p_rows:
-                    if p_map[top[0] + 1][top[1]] == 1:
-                        p_map[top[0] + 1][top[1]] = p_map[top[0]][top[1]]
-                        stack.append((top[0] + 1, top[1], p_map[top[0]][top[1]]))
+                if top[row_i] + 1 < p_rows:
+                    if p_map[top[row_i] + 1][top[col_i]] == 1:
+                        p_map[top[row_i] + 1][top[col_i]] = p_map[top[row_i]][top[col_i]]
+                        stack.append((top[row_i] + 1, top[col_i], p_map[top[row_i]][top[col_i]]))
                         continue
-                if top[1] - 1 > -1:
-                    if p_map[top[0]][top[1] - 1] == 1:
-                        p_map[top[0]][top[1] - 1] = p_map[top[0]][top[1]]
-                        stack.append((top[0], top[1] - 1, p_map[top[0]][top[1]]))
+                if top[col_i] - 1 > -1:
+                    if p_map[top[row_i]][top[col_i] - 1] == 1:
+                        p_map[top[row_i]][top[col_i] - 1] = p_map[top[row_i]][top[col_i]]
+                        stack.append((top[row_i], top[col_i] - 1, p_map[top[row_i]][top[col_i]]))
                         continue
-                if top[1] + 1 < p_cols:
-                    if p_map[top[0]][top[1] + 1] == 1:
-                        p_map[top[0]][top[1] + 1] = p_map[top[0]][top[1]]
-                        stack.append((top[0], top[1] + 1, p_map[top[0]][top[1]]))
+                if top[col_i] + 1 < p_cols:
+                    if p_map[top[row_i]][top[col_i] + 1] == 1:
+                        p_map[top[row_i]][top[col_i] + 1] = p_map[top[row_i]][top[col_i]]
+                        stack.append((top[row_i], top[col_i] + 1, p_map[top[row_i]][top[col_i]]))
                         continue
 
-                centroid_data[0] += top[0]
-                centroid_data[1] += 1
-                centroid_data[2] += top[1]
-                centroid_data[3] += 1
+                size += 1
+                row_sum += top[row_i]
+                col_sum += top[col_i]
+
+
                 stack.pop()
 
-            if centroid_data[1] > 0 or centroid_data[3] > 0:
-                r_cent = 0
-                if centroid_data[1] > 0:
-                    r_cent = float(centroid_data[0]) / centroid_data[1]
-                c_cent = 0
-                if centroid_data[3] > 0:
-                    c_cent = float(centroid_data[2]) / centroid_data[3]
+            if size > 0:
+                r_cent = float(row_sum) / size
+                c_cent = float(col_sum) / size
                 p_islands.append((p_island_color, r_cent, c_cent))
 
 
@@ -94,7 +97,7 @@ def data2(p_rows, p_cols, p_input_data, p_percent):
         p_input_data[p[0]][p[1]] = 1
 
 
-data2(rows, cols, input_data, 1)
+data2(rows, cols, input_data, .5)
 
 print 'input'
 display_map(input_data)
