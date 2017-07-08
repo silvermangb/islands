@@ -50,11 +50,13 @@ def traverse(p_map, p_rows, p_cols, p_island_color, p_islands):
                         p_map[top[0]][top[1] + 1] = p_map[top[0]][top[1]]
                         stack.append((top[0], top[1] + 1, p_map[top[0]][top[1]]))
                         continue
-                stack.pop()
+
                 centroid_data[0] += top[0]
                 centroid_data[1] += 1
                 centroid_data[2] += top[1]
                 centroid_data[3] += 1
+                stack.pop()
+
             if centroid_data[1] > 0 or centroid_data[3] > 0:
                 r_cent = 0
                 if centroid_data[1] > 0:
@@ -92,7 +94,7 @@ def data2(p_rows, p_cols, p_input_data, p_percent):
         p_input_data[p[0]][p[1]] = 1
 
 
-data2(rows, cols, input_data, .5)
+data2(rows, cols, input_data, 1)
 
 print 'input'
 display_map(input_data)
