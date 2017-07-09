@@ -67,12 +67,12 @@ def traverse(p_map, p_rows, p_cols, p_island_color, p_islands):
             if size > 0:
                 r_cent = float(row_sum) / size
                 c_cent = float(col_sum) / size
-                p_islands.append((p_island_color, r_cent, c_cent))
+                p_islands.append((p_island_color, size, r_cent, c_cent))
 
 
-rows = 16
-cols = 16
-input_data = [[0 for j in xrange(cols)] for i in xrange(rows)]
+rows = 8
+cols = 8
+input_data = [[0] * cols for i in xrange(rows)]
 
 
 def data1(p_rows, p_cols, p_input_data):
@@ -106,6 +106,9 @@ traverse(input_data, rows, cols, 1, islands)
 print 'output'
 display_map(input_data)
 
+islands = sorted(islands[:], key=lambda x: x[1])
+
 print len(islands)
+print ' ID   size    rc       cc'
 for i in islands:
-    print i
+    print '% 3d % 3d % 8.2f % 8.2f' % (i[0], i[1], i[2], i[3])
